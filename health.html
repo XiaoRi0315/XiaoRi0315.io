@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>阿護的健康教室</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="min-h-screen bg-green-50 font-sans text-slate-800 pb-10">
+
+    <header class="bg-green-600 text-white p-4 shadow-lg sticky top-0 z-10">
+        <div class="max-w-md mx-auto flex items-center justify-between">
+            <button onclick="location.href='index.html'" class="p-1 hover:bg-green-700 rounded-lg transition-colors">
+                <i data-lucide="arrow-left" class="w-6 h-6"></i>
+            </button>
+            <h1 class="text-xl font-bold flex items-center gap-2">
+                <i data-lucide="sprout" class="w-5 h-5"></i>
+                阿護的健康教室
+            </h1>
+            <div class="w-8"></div> </div>
+    </header>
+
+    <main class="max-w-md mx-auto p-4 space-y-6">
+        
+        <div class="bg-white rounded-2xl p-6 shadow-md border-b-4 border-green-200">
+            <h3 class="text-lg font-bold text-green-800 flex items-center gap-2 mb-4">
+                <i data-lucide="calculator" class="w-5 h-5"></i>
+                我今天該吃多少？(BMR計算)
+            </h3>
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="text-xs font-bold text-slate-500">身高 (cm)</label>
+                    <input type="number" id="heightInput" class="w-full bg-slate-100 rounded-lg p-2 mt-1 focus:ring-2 focus:ring-green-300 outline-none" placeholder="170">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-slate-500">體重 (kg)</label>
+                    <input type="number" id="weightInput" class="w-full bg-slate-100 rounded-lg p-2 mt-1 focus:ring-2 focus:ring-green-300 outline-none" placeholder="60">
+                </div>
+            </div>
+            <div class="mb-4">
+                <label class="text-xs font-bold text-slate-500">性別 / 活動量</label>
+                <div class="flex gap-2 mt-1">
+                    <select id="genderInput" class="bg-slate-100 rounded-lg p-2 text-sm flex-1 outline-none">
+                        <option value="male">男生</option>
+                        <option value="female">女生</option>
+                    </select>
+                    <select id="activityInput" class="bg-slate-100 rounded-lg p-2 text-sm flex-[2] outline-none">
+                        <option value="1.2">久坐不動</option>
+                        <option value="1.375">輕度活動 (1-3天)</option>
+                        <option value="1.55">中度活動 (3-5天)</option>
+                    </select>
+                </div>
+            </div>
+            <button onclick="calculateBMR()" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 rounded-lg transition-colors mb-4">計算熱量</button>
+            
+            <div id="bmrResult" class="hidden bg-green-50 p-3 rounded-lg border border-green-200 text-center">
+                <p class="text-xs text-green-600">你每日建議攝取約</p>
+                <p class="text-2xl font-black text-green-700 my-1"><span id="calValue">0</span> <span class="text-sm">大卡</span></p>
+                <p class="text-xs text-green-600">午餐建議控制在 600-800 大卡！</p>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl p-6 shadow-md border-b-4 border-yellow-200">
+            <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2 mb-4">
+                <i data-lucide="pie-chart" class="w-5 h-5 text-yellow-500"></i>
+                餐盤黃金比例 (211原則)
+            </h3>
+            <div class="flex items-center justify-center mb-4">
+                <div class="w-40 h-40 rounded-full border-4 border-slate-100 relative overflow-hidden shadow-inner">
+                    <div class="absolute top-0 left-0 w-full h-1/2 bg-green-400 flex items-center justify-center text-white font-bold text-sm pt-4">
+                        <div class="transform translate-y-4">蔬菜 2份</div>
+                    </div>
+                    <div class="absolute bottom-0 left-0 w-1/2 h-1/2 bg-yellow-400 flex items-center justify-center text-white font-bold text-sm">
+                        <div class="transform -translate-y-2 translate-x-1">全穀 1份</div>
+                    </div>
+                    <div class="absolute bottom-0 right-0 w-1/2 h-1/2 bg-red-400 flex items-center justify-center text-white font-bold text-sm">
+                        <div class="transform -translate-y-2 -translate-x-1">蛋白 1份</div>
+                    </div>
+                </div>
+            </div>
+            <ul class="text-sm text-slate-600 space-y-2 list-disc list-inside">
+                <li><span class="font-bold text-green-600">蔬菜：</span>至少佔餐盤的一半，提供纖維。</li>
+                <li><span class="font-bold text-yellow-600">全穀：</span>飯量不超過1/4，選擇糙米更佳。</li>
+                <li><span class="font-bold text-red-500">蛋白：</span>豆魚蛋肉類，掌心大小剛剛好。</li>
+            </ul>
+        </div>
+
+        <div class="bg-white rounded-2xl p-6 shadow-md border-b-4 border-blue-200">
+            <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2 mb-4">
+                <i data-lucide="gamepad-2" class="w-5 h-5 text-blue-500"></i>
+                健康大哉問：點擊翻牌
+            </h3>
+            
+            <div class="grid grid-cols-2 gap-3">
+                <div class="flip-card h-32" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-blue-50 border border-blue-100">
+                            <div class="p-2 text-center">
+                                <span class="text-2xl mb-1 block">🥤</span>
+                                <p class="text-sm font-bold text-blue-800">含糖飲料</p>
+                                <p class="text-xs text-blue-400 mt-1">(點我)</p>
+                            </div>
+                        </div>
+                        <div class="flip-card-back bg-red-500 text-white">
+                            <div class="p-2 text-center">
+                                <p class="text-xs font-bold">紅燈食物！</p>
+                                <p class="text-xs mt-1">易造成肥胖與血糖波動。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flip-card h-32" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-blue-50 border border-blue-100">
+                            <div class="p-2 text-center">
+                                <span class="text-2xl mb-1 block">🥬</span>
+                                <p class="text-sm font-bold text-blue-800">燙青菜</p>
+                                <p class="text-xs text-blue-400 mt-1">(點我)</p>
+                            </div>
+                        </div>
+                        <div class="flip-card-back bg-green-500 text-white">
+                            <div class="p-2 text-center">
+                                <p class="text-xs font-bold">綠燈食物！</p>
+                                <p class="text-xs mt-1">增加飽足感與纖維。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-slate-200 rounded-lg p-4 text-center">
+             <button onclick="location.href='index.html'" class="text-slate-600 font-bold flex items-center justify-center gap-2 w-full">
+                 <i data-lucide="utensils" class="w-4 h-4"></i> 回到午餐抽選
+             </button>
+        </div>
+        
+    </main>
+
+    <script>
+        lucide.createIcons();
+
+        // BMR 計算邏輯 (只屬於這個頁面)
+        function calculateBMR() {
+            const h = parseFloat(document.getElementById('heightInput').value);
+            const w = parseFloat(document.getElementById('weightInput').value);
+            const gender = document.getElementById('genderInput').value;
+            const activity = parseFloat(document.getElementById('activityInput').value);
+            const resultDiv = document.getElementById('bmrResult');
+            const calSpan = document.getElementById('calValue');
+
+            if (!h || !w) {
+                alert("請輸入完整的身高與體重喔！");
+                return;
+            }
+
+            // Mifflin-St Jeor 公式
+            let bmr = (10 * w) + (6.25 * h) - (5 * 25) + 5; 
+            if (gender === 'female') {
+                bmr = (10 * w) + (6.25 * h) - (5 * 25) - 161;
+            }
+
+            const tdee = Math.round(bmr * activity);
+
+            calSpan.innerText = tdee;
+            resultDiv.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
